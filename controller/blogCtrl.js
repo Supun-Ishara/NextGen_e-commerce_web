@@ -34,7 +34,9 @@ const getBlog = asyncHandler(async (req, res) => {
    const { id } = req.params;
    validateMongoDbId(id);
    try{
-      const getBlog = await Blog.findById(id);
+      const getBlog = await Blog.findById(id)
+      .populate("likes")
+      .populate("dislikes");
       const updateViews = await Blog.findByIdAndUpdate(
          id,
           {
@@ -44,7 +46,7 @@ const getBlog = asyncHandler(async (req, res) => {
             new: true
           }
       );
-      res.json(updateViews);
+      res.json(getBlog);
    }
    catch (error) {
       throw new Error(error);
@@ -116,4 +118,55 @@ const likeBlog = asyncHandler(async (req, res) => {
    }
 });
 
-module.exports = { createBlog, updateBlog, getBlog, getAllBlogs, deleteBlog, likeBlog  };
+const dislikeBlog = asyncHandler(async (req, res) => {
+   const { blogId } = req.body;
+   validateMongoDbId(blogId);
+
+   //Find the blog which you want to be loked
+   const blog = await Blog.findById(blogId);
+   // Find the login user
+   const loginUserId = req?.user?._id;
+   // Find if the user has liked the blog
+   const isDisLiked = blog?.isDisliked;
+   // Find if the user has disliked the blog
+   const alreadyliked = blog?.likes?.find(
+      ((userId) => userId?.toString() === loginUserId?.toString())
+   );
+   if (alreadyliked) {
+      const blog = await Blog.findByIdAndUpdate(blogId, {
+         $pull: { likes: loginUserId },
+         isliked:false,
+      }, {
+         new: true 
+      });
+      res.json(blog);
+   }
+   if ( isDisLiked ) {
+      const blog = await Blog.findByIdAndUpdate(blogId, {
+         $pull: { dislikes: loginUserId },
+         isDisliked:false,
+      }, {
+         new: true 
+      });
+      res.json(blog);
+   }
+   else {
+      const blog = await Blog.findByIdAndUpdate(blogId, {
+         $push: { dislikes: loginUserId },
+         isDisliked: true,
+      }, {
+         new: true 
+      });
+      res.json(blog);
+   }
+});
+
+module.exports = { 
+   createBlog, 
+   updateBlog, 
+   getBlog, 
+   getAllBlogs, 
+   deleteBlog, 
+   likeBlog,
+   dislikeBlog,
+  };
