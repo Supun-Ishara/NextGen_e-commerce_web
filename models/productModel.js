@@ -49,10 +49,16 @@ var productSchema = new mongoose.Schema({
     },
     ratings: [{
         star:Number,
+        comment: String,
         postedby:{ type: mongoose.Schema.Types.ObjectId, ref: "User"},
     },
   ],
-}, {timestamps:true}
+    totalrating: {
+        type: String,
+        default: 0,
+},
+}, 
+{timestamps:true}
 );
 
 //Export the model
