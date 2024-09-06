@@ -60,4 +60,8 @@ var productSchema = new mongoose.Schema({
 );
 
 //Export the model
+
+//mongoose.model('Product', productSchema);
 module.exports = mongoose.model('Product', productSchema);
+
+//module.exports = mongoose.model('Product');
