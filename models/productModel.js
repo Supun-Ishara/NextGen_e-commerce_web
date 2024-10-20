@@ -1,5 +1,7 @@
 const mongoose = require('mongoose'); // Erase if already required
 
+const ALLOWED_SIZES = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL'];
+
 // Declare the Schema of the Mongo model
 var productSchema = new mongoose.Schema({
     title:{
@@ -48,7 +50,17 @@ var productSchema = new mongoose.Schema({
     ],
     color: [{type: mongoose.Schema.Types.ObjectId, ref: "Color"}],
     tags: String,
-
+    size: {
+        type: [String],
+        enum: ALLOWED_SIZES,
+        required: true,
+        validate: {
+            validator: function(sizes) {
+                return sizes && sizes.length > 0;
+            },
+            message: 'At least one size must be selected'
+        }
+    },
     sku:{
         type:String,
         required:true,

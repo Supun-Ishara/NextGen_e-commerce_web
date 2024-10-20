@@ -357,6 +357,54 @@ const userCart = asyncHandler(async (req, res) => {
     }
 });
 
+const removeProductFromCart = asyncHandler(async (req, res) => {
+  const { _id } = req.user;
+  const { cartItemId } = req.params;
+  validateMongoDbId(_id);
+  try {
+    const deleteProductFromCart = await Cart.deleteOne({ userId: _id, _id: cartItemId })
+    res.json(deleteProductFromCart);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+// const updatedProductQuantityFromCart = asyncHandler(async (req, res) => {
+//   const { _id } = req.user;
+//   const { cartItemId, newQuantity } = req.params;
+//   validateMongoDbId(_id);
+//   try {
+//     const cartItem = await Cart.FindOne({ userId: _id, _id: cartItemId })
+//     cartItem.quantity = newQuantity
+//     cartItem.save()
+//     res.json(cartItem);
+//   } catch (error) {
+//     throw new Error(error);
+//   }
+// });
+
+const updatedProductQuantityFromCart = asyncHandler(async (req, res) => {
+  const { _id } = req.user;
+  const { cartItemId, newQuantity } = req.params;
+  validateMongoDbId(_id);
+
+  try {
+    const cartItem = await Cart.findOne({ userId: _id, _id: cartItemId });
+    
+    if (!cartItem) {
+      return res.status(404).json({ message: "Cart item not found" });
+    }
+
+    cartItem.quantity = newQuantity;
+    await cartItem.save();
+
+    res.json(cartItem);
+  } catch (error) {
+    res.status(500).json({ message: "Error updating cart item quantity", error: error.message });
+  }
+});
+
+
 const emptyCart = asyncHandler(async (req, res) => {
   const { _id } = req.user;
   validateMongoDbId(_id);
@@ -520,4 +568,6 @@ module.exports = {
     getAllOrders,
     updateOrderStatus,
     getOrderByUserId,
+    removeProductFromCart,
+    updatedProductQuantityFromCart,
 };

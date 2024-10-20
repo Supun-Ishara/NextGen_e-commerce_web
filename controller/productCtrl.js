@@ -63,7 +63,7 @@ const getAllProduct = asyncHandler(async (req, res) => {
         let queryStr = JSON.stringify(queryObj);
         queryStr = queryStr.replace(/\b(gte|gt|lt)\b/g, (match) => `$${match}`);
 
-        let query = Product.find (JSON.parse(queryStr));
+        let query = Product.find (JSON.parse(queryStr)).populate('color');
 
         // Sorting
 
