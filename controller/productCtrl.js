@@ -9,6 +9,7 @@ const createProduct = asyncHandler(async (req, res) => {
         if(req.body.title){
             req.body.slug = slugify(req.body.title);
         }
+        req.body.price = Number(req.body.price);
       const newProduct = await Product.create(req.body);
       res.json(newProduct);
     } catch (error) {
@@ -23,6 +24,7 @@ const updateProduct = asyncHandler(async (req, res) => {
         if(req.body.title){
             req.body.slug = slugify(req.body.title);
         }
+        req.body.price = Number(req.body.price);
         const updateProduct = await Product.findByIdAndUpdate(id, req.body, { new: true });
        res.json(updateProduct); 
     } catch (error){

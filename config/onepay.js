@@ -25,14 +25,14 @@ class OnePay {
         return numAmount;
     }
 
-    validatePhoneNumber(mobile) {
-        // Sri Lankan phone number validation
-        const phoneRegex = /^\+94[0-9]{9}$/;
-        if (!phoneRegex.test(mobile)) {
-            throw new Error('Invalid phone number format. Must start with +94');
-        }
-        return mobile;
-    }
+    // validatePhoneNumber(mobile) {
+    //     // Sri Lankan phone number validation
+    //     const phoneRegex = /^\+94[0-9]{9}$/;
+    //     if (!phoneRegex.test(mobile)) {
+    //         throw new Error('Invalid phone number format. Must start with +94');
+    //     }
+    //     return mobile;
+    // }
 
     async generatePaymentLink(paymentDetails) {
         const amount = this.validateAmount(paymentDetails.amount);
@@ -45,7 +45,7 @@ class OnePay {
             customer_first_name: paymentDetails.firstName,
             customer_last_name: paymentDetails.lastName,
             customer_phone_number: mobile,
-            customer_email: paymentDetails.email,
+           // customer_email: paymentDetails.email,
             transaction_redirect_url: this.redirectUrl,
             additional_data: paymentDetails.additionalData
         };

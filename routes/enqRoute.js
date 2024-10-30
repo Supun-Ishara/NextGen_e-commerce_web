@@ -1,7 +1,7 @@
 const express = require("express");
 const { 
     createEnquiry, 
-    updateEnquiry, 
+    updateEnquiry,  
     deleteEnquiry, 
     getEnquiry, 
     getallEnquiry 

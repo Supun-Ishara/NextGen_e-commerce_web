@@ -22,6 +22,8 @@ const {
   removeProductFromCart,
   updatedProductQuantityFromCart,
   getMyOrders,
+  getallOrders,
+  getOrderByUserId,
 } = require("../controller/userCtrl");
 const { authMiddleware, isAdmin } = require("../middlewares/authMiddleware");
 const { checkout, paymentVerification } = require("../controller/paymentCtrl");
@@ -47,8 +49,9 @@ router.post("/order/paymentVerification",authMiddleware, paymentVerification);
 
 router.get("/all-users", getallUser);
 router.get("/getmyorders", authMiddleware, getMyOrders);
-// router.get("/getallorders", authMiddleware, isAdmin, getAllOrders);
-// router.post("/getorderbyuser/:id", authMiddleware, isAdmin, getOrderByUserId);
+ router.get("/getallorders", authMiddleware, isAdmin, getallOrders);
+ router.post("/getorderbyuser/:id", authMiddleware, isAdmin, getOrderByUserId);
+ 
 
 router.get("/refresh", handleRefreshToken);
 router.get("/logout", logout);

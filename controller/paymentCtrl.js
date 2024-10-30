@@ -12,7 +12,8 @@ const onepay = new OnePay({
 const checkout = async (req, res) => {
     try {
         // Validate required fields
-        const requiredFields = ['amount', 'firstName', 'lastName', 'phone', 'email'];
+        //const requiredFields = ['amount', 'firstName', 'lastName', 'mobile', 'email']; 
+        const requiredFields = ['amount', 'firstName', 'lastName', 'mobile']; //'email'
         for (const field of requiredFields) {
             if (!req.body[field]) {
                 throw new Error(`Missing required field: ${field}`);
@@ -25,8 +26,8 @@ const checkout = async (req, res) => {
             customerDetails: {
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
-                phone: req.body.phone,
-                email: req.body.email
+                mobile: req.body.mobile,
+               // email: req.body.email
             },
             status: 'pending',
             createdAt: new Date()
@@ -37,7 +38,7 @@ const checkout = async (req, res) => {
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             mobile: req.body.mobile,
-            email: req.body.email,
+           // email: req.body.email,
             reference: paymentRecord._id.toString(),
             additionalData: req.body.additionalData
         };
